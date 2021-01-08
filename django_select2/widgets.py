@@ -15,7 +15,6 @@ from django.core.validators import EMPTY_VALUES
 from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
-from django.utils.six import text_type
 
 from django_select2.media import (get_select2_css_libs,
                                   get_select2_heavy_js_libs,
@@ -202,7 +201,7 @@ class Select2Mixin(object):
         if choices:
             args.append(choices)
 
-        s = text_type(super(Select2Mixin, self).render(*args))  # Thanks to @ouhouhsami Issue#1
+        s = str(super(Select2Mixin, self).render(*args))  # Thanks to @ouhouhsami Issue#1
         s += self.media.render()
         final_attrs = self.build_attrs(attrs)
         id_ = final_attrs.get('id', None)
@@ -290,7 +289,7 @@ class MultipleSelect2HiddenInput(forms.TextInput):
 
     def render(self, name, value, attrs=None, choices=()):
         attrs = self.build_attrs(attrs, multiple='multiple')
-        s = text_type(super(MultipleSelect2HiddenInput, self).render(name, "", attrs))
+        s = str(super(MultipleSelect2HiddenInput, self).render(name, "", attrs))
         id_ = attrs.get('id', None)
         if id_:
             jscode = ''

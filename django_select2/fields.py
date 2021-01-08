@@ -871,7 +871,7 @@ class AutoModelSelect2TagField(six.with_metaclass(UnhideableQuerysetType,
         class Tag(models.Model):
             tag = models.CharField(max_length=10, unique=True)
             def __str__(self):
-                return text_type(self.tag)
+                return str(self.tag)
 
         class TagField(AutoModelSelect2TagField):
             queryset = Tag.objects
