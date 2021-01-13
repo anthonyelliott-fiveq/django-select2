@@ -12,7 +12,6 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import ModelChoiceIterator
-from django.utils import six
 from django.utils.encoding import force_text, smart_text
 from django.utils.translation import ugettext_lazy as _
 
@@ -31,6 +30,19 @@ except ImportError:
     UnhideableQuerysetTypeBase = type
 
 logger = logging.getLogger(__name__)
+
+
+# Copied from django.utils.six for Django 1.11
+def with_metaclass(meta, *bases):
+    """Create a base class with a metaclass."""
+    # This requires a bit of explanation: the basic idea is to make a dummy
+    # metaclass for one level of class instantiation that replaces itself with
+    # the actual metaclass.
+    class metaclass(meta):
+
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
 
 
 class AutoViewFieldMixin(object):
@@ -826,7 +838,7 @@ class AutoSelect2TagField(AutoViewFieldMixin, HeavySelect2TagField):
 # ## Heavy field, specialized for Model, that uses central AutoView ##
 
 
-class AutoModelSelect2Field(six.with_metaclass(UnhideableQuerysetType,
+class AutoModelSelect2Field(with_metaclass(UnhideableQuerysetType,
                                                ModelResultJsonMixin,
                                                AutoViewFieldMixin,
                                                HeavyModelSelect2ChoiceField)):
@@ -840,7 +852,7 @@ class AutoModelSelect2Field(six.with_metaclass(UnhideableQuerysetType,
     widget = AutoHeavySelect2Widget
 
 
-class AutoModelSelect2MultipleField(six.with_metaclass(UnhideableQuerysetType,
+class AutoModelSelect2MultipleField(with_metaclass(UnhideableQuerysetType,
                                                        ModelResultJsonMixin,
                                                        AutoViewFieldMixin,
                                                        HeavyModelSelect2MultipleChoiceField)):
@@ -854,7 +866,7 @@ class AutoModelSelect2MultipleField(six.with_metaclass(UnhideableQuerysetType,
     widget = AutoHeavySelect2MultipleWidget
 
 
-class AutoModelSelect2TagField(six.with_metaclass(UnhideableQuerysetType,
+class AutoModelSelect2TagField(with_metaclass(UnhideableQuerysetType,
                                                   ModelResultJsonMixin,
                                                   AutoViewFieldMixin,
                                                   HeavyModelSelect2TagField)):

@@ -10,7 +10,7 @@ import re
 from itertools import chain
 
 from django import forms
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import EMPTY_VALUES
 from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_text
