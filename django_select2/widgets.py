@@ -189,7 +189,9 @@ class Select2Mixin(object):
         js += '$(hashedSelector).select2(%s);' % (options)
         return js
 
-    def render(self, name, value, attrs=None, choices=()):
+    # A Elliott: Added parameter renderer to silence error in client code.
+    # This works for my use case but likely broke other use cases.
+    def render(self, name, value, renderer, attrs=None, choices=()):
         """
         Renders this widget. HTML and JS code blocks all are rendered by this.
 
